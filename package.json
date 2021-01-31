@@ -1,0 +1,19 @@
+{
+  "name": "tophoneys-backend",
+  "version": "1.0.0",
+  "description": "TOP HONEYS e-commerce backend",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "test"
+  },
+  "author": "Tomasz Pietrzykowski / tomaszpietrzykowski.com",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
