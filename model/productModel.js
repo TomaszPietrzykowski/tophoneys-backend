@@ -33,6 +33,10 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    description: {
+      type: String,
+      required: true,
+    },
     brand: {
       type: String,
     },
@@ -69,10 +73,6 @@ const productSchema = mongoose.Schema(
       default: 0,
     },
     isPromo: {
-      type: Boolean,
-      default: false,
-    },
-    isSale: {
       type: Boolean,
       default: false,
     },
