@@ -1,6 +1,5 @@
 const products = [
   {
-    _id: '1',
     name: 'Linden Honey 1000ml',
     image: '/images/airpods.jpg',
     description:
@@ -19,7 +18,6 @@ const products = [
     isPublished: true,
   },
   {
-    _id: '2',
     name: 'Acacia Honey 1000ml',
     image: '/images/airpods.jpg',
     description:
@@ -38,7 +36,6 @@ const products = [
     isPublished: true,
   },
   {
-    _id: '3',
     name: 'Wildflowers Honey 500ml',
     image: '/images/airpods.jpg',
     description:
@@ -57,7 +54,6 @@ const products = [
     isPublished: true,
   },
   {
-    _id: '4',
     name: 'Wildflowers Honey 500ml',
     image: '/images/airpods.jpg',
     description:
@@ -76,7 +72,6 @@ const products = [
     isPublished: true,
   },
   {
-    _id: '5',
     name: 'Honey with fish 500ml',
     image: '/images/airpods.jpg',
     description:
@@ -95,7 +90,6 @@ const products = [
     isPublished: true,
   },
   {
-    _id: '6',
     name: 'Honey with raspberry 500ml',
     image: '/images/airpods.jpg',
     description:

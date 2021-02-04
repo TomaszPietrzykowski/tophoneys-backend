@@ -13,7 +13,7 @@ const connectDB = async () => {
         .cyan.bold
     );
   } catch (err) {
-    console.log(`Error: ${err.message}`);
+    console.log(`Error: ${err.message}`.red.underline.bold);
     process.exit(1);
   }
 };

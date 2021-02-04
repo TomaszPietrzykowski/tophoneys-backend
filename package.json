@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "test"
+    "test": "test",
+    "data:import": "node data/seeder",
+    "data:destroy": "node data/seeder -d"
   },
   "author": "Tomasz Pietrzykowski / tomaszpietrzykowski.com",
   "license": "ISC",
