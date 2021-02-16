@@ -3,12 +3,16 @@ const colors = require('colors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const productRouter = require('./router/productRoutes');
+const errorMiddleware = require('./middleware/errorMiddleware.js');
 
 dotenv.config();
 connectDB();
 const app = express();
 
 app.use('/api/products', productRouter);
+
+app.use(errorMiddleware.notFound);
+app.use(errorMiddleware.errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(
