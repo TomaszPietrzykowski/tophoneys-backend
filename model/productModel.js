@@ -44,9 +44,6 @@ const productSchema = mongoose.Schema(
       type: [String],
       required: true,
     },
-    subcategory: {
-      type: [String],
-    },
     capacity: {
       type: String,
     },
