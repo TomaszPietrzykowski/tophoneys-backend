@@ -8,4 +8,9 @@ const userController = require("../controller/userController");
 // @access: Public
 router.post("/login", userController.authUser);
 
+// @description: Register new user
+// @route: POST /api/users
+// @access: Public
+router.post("/", userController.registerUser);
+
 module.exports = router;
