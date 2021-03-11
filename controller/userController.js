@@ -51,3 +51,10 @@ exports.authUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid email or password");
   }
 });
+
+// @description: Get user profile
+// @route: GET /api/users/profile
+// @access: Public
+exports.getUserProfile = asyncHandler(async (req, res) => {
+  res.send("User profile placeholder - success");
+});
