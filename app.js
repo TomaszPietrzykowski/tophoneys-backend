@@ -1,15 +1,19 @@
-const express = require('express');
-const colors = require('colors');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
-const productRouter = require('./router/productRoutes');
-const errorMiddleware = require('./middleware/errorMiddleware.js');
+const express = require("express");
+const colors = require("colors");
+const dotenv = require("dotenv");
+const connectDB = require("./config/db");
+const productRouter = require("./router/productRoutes");
+const userRouter = require("./router/userRoutes");
+const errorMiddleware = require("./middleware/errorMiddleware.js");
 
 dotenv.config();
 connectDB();
 const app = express();
 
-app.use('/api/products', productRouter);
+app.use(express.json());
+
+app.use("/api/products", productRouter);
+app.use("/api/users", userRouter);
 
 app.use(errorMiddleware.notFound);
 app.use(errorMiddleware.errorHandler);
