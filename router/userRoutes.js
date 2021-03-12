@@ -12,7 +12,13 @@ router.post("/login", userController.authUser);
 // @route: POST /api/users
 // @access: Public
 router.post("/", userController.registerUser);
+
+// @description: Get user profile
+// @route: GET /api/users/profile
+// @access: Public
 router
   .route("/profile")
-  .get(authMiddleware.protect, userController.getUserProfile);
+  .get(authMiddleware.protect, userController.getUserProfile)
+  .put(authMiddleware.protect, userController.updateUserProfile);
+
 module.exports = router;
