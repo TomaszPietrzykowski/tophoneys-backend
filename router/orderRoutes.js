@@ -8,4 +8,9 @@ const orderController = require("../controller/orderController");
 // @access: Private
 router.route("/").post(authMiddleware.protect, orderController.addOrderItems);
 
+// @description: Get order by Id
+// @route: POST /api/orders/:id
+// @access: Private
+router.route("/:id").get(authMiddleware.protect, orderController.getOrderById);
+
 module.exports = router;
