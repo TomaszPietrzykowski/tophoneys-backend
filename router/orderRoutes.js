@@ -13,11 +13,11 @@ router.route("/").post(authMiddleware.protect, orderController.addOrderItems);
 // @access: Private
 router.route("/:id").get(authMiddleware.protect, orderController.getOrderById);
 
-// @description: Get order by Id
+// @description: Update order to paid
 // @route: PUT /api/orders/:id/pay
 // @access: Private
 router
-  .route("/:id")
-  .get(authMiddleware.protect, orderController.updateOrderToPaid);
+  .route("/:id/pay")
+  .put(authMiddleware.protect, orderController.updateOrderToPaid);
 
 module.exports = router;
