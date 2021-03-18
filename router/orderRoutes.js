@@ -8,6 +8,13 @@ const orderController = require("../controller/orderController");
 // @access: Private
 router.route("/").post(authMiddleware.protect, orderController.addOrderItems);
 
+// @description: Get logged in user orders
+// @route: GET /api/orders/myorders
+// @access: Private
+router
+  .route("/myorders")
+  .get(authMiddleware.protect, orderController.getMyOrders);
+
 // @description: Get order by Id
 // @route: POST /api/orders/:id
 // @access: Private
