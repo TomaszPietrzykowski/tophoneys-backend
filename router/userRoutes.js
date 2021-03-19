@@ -15,4 +15,12 @@ router
   .get(authMiddleware.protect, userController.getUserProfile)
   .put(authMiddleware.protect, userController.updateUserProfile);
 
+router
+  .route("/:id")
+  .delete(
+    authMiddleware.protect,
+    authMiddleware.admin,
+    userController.deleteUser
+  );
+
 module.exports = router;
