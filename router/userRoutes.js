@@ -17,6 +17,8 @@ router
 
 router
   .route("/:id")
+  .get(authMiddleware.protect, authMiddleware.admin, userController.getUserById)
+  .put(authMiddleware.protect, authMiddleware.admin, userController.updateUser)
   .delete(
     authMiddleware.protect,
     authMiddleware.admin,
