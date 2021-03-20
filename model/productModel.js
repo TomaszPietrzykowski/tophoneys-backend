@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const reviewSchema = mongoose.Schema(
   {
@@ -18,11 +18,23 @@ const reviewSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+const dropdownSchema = mongoose.Schema({
+  label: {
+    type: String,
+    required: true,
+  },
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Product",
+    required: true,
+  },
+});
+
 const productSchema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
     name: {
@@ -47,6 +59,7 @@ const productSchema = mongoose.Schema(
     capacity: {
       type: String,
     },
+    capacityDropdown: [dropdownSchema],
     price: {
       type: Number,
       required: true,
@@ -84,6 +97,6 @@ const productSchema = mongoose.Schema(
   }
 );
 
-const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model("Product", productSchema);
 
 module.exports = Product;

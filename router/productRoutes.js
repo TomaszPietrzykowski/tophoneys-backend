@@ -3,7 +3,14 @@ const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
 const productController = require("../controller/productController");
 
-router.get("/", productController.getProducts);
+router
+  .route("/")
+  .get(productController.getProducts)
+  .post(
+    authMiddleware.protect,
+    authMiddleware.admin,
+    productController.createProduct
+  );
 
 router
   .route("/:id")
@@ -12,6 +19,11 @@ router
     authMiddleware.protect,
     authMiddleware.admin,
     productController.deleteProduct
+  )
+  .put(
+    authMiddleware.protect,
+    authMiddleware.admin,
+    productController.updateProduct
   );
 
 router.get("/category/:id", productController.getCategory);
