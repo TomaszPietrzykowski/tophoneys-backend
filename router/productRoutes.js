@@ -1,21 +1,19 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const authMiddleware = require("../middleware/authMiddleware");
+const productController = require("../controller/productController");
 
-const productController = require('../controller/productController');
+router.get("/", productController.getProducts);
 
-// @desc   Fetch all products
-// @route  GET /api/products
-// @access Public
-router.get('/', productController.getProducts);
+router
+  .route("/:id")
+  .get(productController.getProductById)
+  .delete(
+    authMiddleware.protect,
+    authMiddleware.admin,
+    productController.deleteProduct
+  );
 
-// @desc   Get product by id
-// @route  GET /api/products/:id
-// @access Public
-router.get('/:id', productController.getProductById);
-
-// @desc   Get products by category
-// @route  GET /api/products/category/:id
-// @access Public
-router.get('/category/:id', productController.getCategory);
+router.get("/category/:id", productController.getCategory);
 
 module.exports = router;
