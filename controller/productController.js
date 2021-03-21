@@ -83,7 +83,7 @@ exports.updateProduct = asyncHandler(async (req, res) => {
 
   if (product) {
     product.name = req.body.name || product.name;
-    product.user = req.user._id || product.user;
+    product.user = req.user._id;
     product.image = req.body.image || product.image;
     product.description = req.body.description || product.description;
     product.brand = req.body.brand || product.brand;
@@ -95,8 +95,8 @@ exports.updateProduct = asyncHandler(async (req, res) => {
     product.countInStock = req.body.countInStock || product.countInStock;
     product.countryOfOrigin =
       req.body.countryOfOrigin || product.countryOfOrigin;
-    product.isPromo = req.body.isPromo || product.isPromo;
-    product.isPublished = req.body.isPublished || product.isPublished;
+    product.isPromo = req.body.isPromo;
+    product.isPublished = req.body.isPublished;
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);
