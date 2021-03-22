@@ -1,5 +1,7 @@
 const Product = require("../model/productModel");
 const asyncHandler = require("express-async-handler");
+const fs = require("fs");
+const path = require("path");
 
 // @description: Fetch all products
 // @route: GET /api/products
@@ -44,6 +46,8 @@ exports.getCategory = asyncHandler(async (req, res) => {
 exports.deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (product) {
+    const img = product.image;
+    fs.unlinkSync(path.join(__dirname, "../", img));
     await product.remove();
     res.json({ message: "Product removed" });
   } else {
