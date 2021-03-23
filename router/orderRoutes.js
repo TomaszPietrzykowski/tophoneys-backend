@@ -18,4 +18,12 @@ router
   .route("/:id/pay")
   .put(authMiddleware.protect, orderController.updateOrderToPaid);
 
+router
+  .route("/:id/deliver")
+  .put(
+    authMiddleware.protect,
+    authMiddleware.admin,
+    orderController.updateOrderToSent
+  );
+
 module.exports = router;
