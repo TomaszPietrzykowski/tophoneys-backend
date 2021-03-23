@@ -28,4 +28,6 @@ router
 
 router.get("/category/:id", productController.getCategory);
 
+router.get("/search/:keyword", productController.searchProducts);
+
 module.exports = router;

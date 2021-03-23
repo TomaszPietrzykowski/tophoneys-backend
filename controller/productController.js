@@ -40,6 +40,26 @@ exports.getCategory = asyncHandler(async (req, res) => {
   }
 });
 
+// @description:   Get products by keyword
+// @route:  GET /api/products/search/:keyword
+// @access: Public
+exports.searchProducts = asyncHandler(async (req, res) => {
+  const keyword = req.params.keyword;
+
+  if (keyword) {
+    const products = await Product.find({
+      name: {
+        $regex: keyword,
+        $options: "i",
+      },
+    });
+    res.json(products);
+  } else {
+    const products = await Product.find({});
+    res.json(products);
+  }
+});
+
 // @description: Delete product
 // @route: DELETE /api/products/:id
 // @access: Private/Admin
