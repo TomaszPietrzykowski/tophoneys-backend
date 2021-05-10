@@ -10,7 +10,11 @@
     "data:import": "node data/seeder",
     "data:destroy": "node data/seeder -d"
   },
-  "author": "Tomasz Pietrzykowski / tomaszpietrzykowski.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TomaszPietrzykowski/tophoneys-backend"
+  },
+  "author": "Tomasz Pietrzykowski",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
