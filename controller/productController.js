@@ -2,12 +2,13 @@ const Product = require("../model/productModel")
 const asyncHandler = require("express-async-handler")
 const fs = require("fs")
 const path = require("path")
+const settings = require("../config/settings")
 
 // @description: Fetch all products
 // @route: GET /api/products
 // @access: Public
 exports.getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 2
+  const pageSize = settings.productAdminPageSize
   const page = Number(req.query.pageNumber) || 1
   const count = await Product.countDocuments({})
   const products = await Product.find({})
@@ -32,7 +33,7 @@ exports.getProductById = asyncHandler(async (req, res) => {
 // @route:  GET /api/products/category/:id
 // @access: Public
 exports.getCategory = asyncHandler(async (req, res) => {
-  const pageSize = 3
+  const pageSize = settings.productCategoryPageSize
   const page = Number(req.query.pageNumber) || 1
   const id = req.params.id
   if (id === "new") {
@@ -45,10 +46,14 @@ exports.getCategory = asyncHandler(async (req, res) => {
   } else if (id === "sale") {
     const count = await Product.countDocuments({ isPromo: true })
     const products = await Product.find({ isPromo: true })
+      .limit(pageSize)
+      .skip(pageSize * (page - 1))
     res.json({ products, page, pages: Math.ceil(count / pageSize) })
   } else {
     const count = await Product.countDocuments({ category: id })
     const products = await Product.find({ category: id })
+      .limit(pageSize)
+      .skip(pageSize * (page - 1))
     res.json({ products, page, pages: Math.ceil(count / pageSize) })
   }
 })
@@ -58,18 +63,26 @@ exports.getCategory = asyncHandler(async (req, res) => {
 // @access: Public
 exports.searchProducts = asyncHandler(async (req, res) => {
   const keyword = req.params.keyword
+  const pageSize = settings.productSearchPageSize
+  const page = Number(req.query.pageNumber) || 1
 
   if (keyword) {
-    const products = await Product.find({
+    const search = {
       name: {
         $regex: keyword,
         $options: "i",
       },
-    })
-    res.json(products)
+    }
+    const count = await Product.countDocuments({ ...search })
+    const products = await Product.find({ ...search })
+      .limit(pageSize)
+      .skip(pageSize * (page - 1))
+
+    res.json({ products, page, pages: Math.ceil(count / pageSize) })
   } else {
+    const count = await Product.countDocuments({})
     const products = await Product.find({})
-    res.json(products)
+    res.json({ products, page, pages: Math.ceil(count / pageSize) })
   }
 })
 
