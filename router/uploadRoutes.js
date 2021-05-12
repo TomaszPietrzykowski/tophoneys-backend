@@ -1,12 +1,12 @@
-const express = require("express");
-const multer = require("multer");
-const path = require("path");
+const express = require("express")
+const multer = require("multer")
+const path = require("path")
 
-const router = express.Router();
+const router = express.Router()
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, "public/images/");
+    cb(null, "public/images/")
   },
   filename(req, file, cb) {
     cb(
@@ -14,31 +14,31 @@ const storage = multer.diskStorage({
       `${file.originalname.split(".")[0]}-${Date.now()}${path.extname(
         file.originalname
       )}`
-    );
+    )
   },
-});
+})
 
 function checkFileType(file, cb) {
-  const filetypes = /jpg|jpeg|png/;
-  const extName = filetypes.test(path.extname(file.originalname).toLowerCase());
-  const mimeType = filetypes.test(file.mimetype);
+  const filetypes = /jpg|jpeg|png/
+  const extName = filetypes.test(path.extname(file.originalname).toLowerCase())
+  const mimeType = filetypes.test(file.mimetype)
 
   if (extName && mimeType) {
-    return cb(null, true);
+    return cb(null, true)
   } else {
-    cb("Images only!");
+    cb("Images only!")
   }
 }
 
 const upload = multer({
   storage: storage,
   fileFilter: function (req, file, cb) {
-    checkFileType(file, cb);
+    checkFileType(file, cb)
   },
-});
+})
 
 router.post("/", upload.single("image"), (req, res) => {
-  res.send(`/${req.file.path}`);
-});
+  res.send(`/${req.file.path}`)
+})
 
-module.exports = router;
+module.exports = router
