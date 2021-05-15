@@ -1,5 +1,5 @@
 module.exports = {
-  productCategoryPageSize: 3,
-  productSearchPageSize: 3,
-  productAdminPageSize: 4,
+  productCategoryPageSize: 12,
+  productSearchPageSize: 12,
+  productAdminPageSize: 20,
 }
