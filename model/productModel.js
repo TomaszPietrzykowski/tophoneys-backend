@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
 const reviewSchema = mongoose.Schema(
   {
@@ -16,7 +16,7 @@ const reviewSchema = mongoose.Schema(
     },
   },
   { timestamps: true }
-);
+)
 
 const dropdownSchema = mongoose.Schema({
   label: {
@@ -28,7 +28,7 @@ const dropdownSchema = mongoose.Schema({
     ref: "Product",
     required: true,
   },
-});
+})
 
 const productSchema = mongoose.Schema(
   {
@@ -65,6 +65,10 @@ const productSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
+    previousPrice: {
+      type: Number,
+      default: 0,
+    },
     countInStock: {
       type: Number,
       required: true,
@@ -95,8 +99,8 @@ const productSchema = mongoose.Schema(
   {
     timestamps: true,
   }
-);
+)
 
-const Product = mongoose.model("Product", productSchema);
+const Product = mongoose.model("Product", productSchema)
 
-module.exports = Product;
+module.exports = Product
