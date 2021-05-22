@@ -142,6 +142,7 @@ exports.updateProduct = asyncHandler(async (req, res) => {
     product.capacityDropdown =
       req.body.capacityDropdown || product.capacityDropdown
     product.price = req.body.price || product.price
+    product.previousPrice = req.body.previousPrice || product.previousPrice
     product.countInStock = req.body.countInStock || product.countInStock
     product.countryOfOrigin =
       req.body.countryOfOrigin || product.countryOfOrigin
