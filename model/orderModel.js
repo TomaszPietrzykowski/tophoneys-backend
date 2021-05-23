@@ -1,11 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose")
 
 const orderSchema = mongoose.Schema(
   {
     user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
+      type: Object,
+    },
+    userId: {
+      type: String,
     },
     orderItems: [
       {
@@ -16,7 +17,7 @@ const orderSchema = mongoose.Schema(
         product: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
-          ref: 'Product',
+          ref: "Product",
         },
       },
     ],
@@ -31,10 +32,7 @@ const orderSchema = mongoose.Schema(
       required: true,
     },
     paymentResult: {
-      id: { type: String },
-      status: { type: String },
-      update_time: { type: String },
-      email_address: { type: String },
+      type: Object,
     },
     taxPrice: {
       type: Number,
@@ -71,8 +69,8 @@ const orderSchema = mongoose.Schema(
   {
     timestamps: true,
   }
-);
+)
 
-const Order = mongoose.model('Order', orderSchema);
+const Order = mongoose.model("Order", orderSchema)
 
-module.exports = Order;
+module.exports = Order

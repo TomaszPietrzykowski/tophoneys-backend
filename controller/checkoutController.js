@@ -71,7 +71,7 @@ exports.createPayment = asyncHandler(async (req, res) => {
 exports.executePayment = asyncHandler(async (req, res) => {
   // 2. Get the payment ID and the payer ID from the request body.
   var orderID = req.body.orderID
-  var payerID = req.body.payerID
+  // var payerID = req.body.payerID
 
   const request = new checkoutNodeJssdk.orders.OrdersCaptureRequest(orderID)
   request.requestBody({})
@@ -89,8 +89,7 @@ exports.executePayment = asyncHandler(async (req, res) => {
       order.isPaid = true
       order.paidAt = Date.now()
       order.paymentResult = {
-        capture,
-        status: "success",
+        ...capture.result,
       }
 
       await order.save()

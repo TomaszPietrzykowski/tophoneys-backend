@@ -10,7 +10,7 @@ exports.addOrderItems = asyncHandler(async (req, res) => {
     return (Math.round(num * 100) / 100).toFixed(2)
   }
 
-  const { orderItems, shippingAddress, paymentMethod } = req.body
+  const { orderItems, shippingAddress, paymentMethod, user } = req.body
   // recalculate prices
   const verifyPrices = async (itemsArray) => {
     for (const item of itemsArray) {
@@ -36,9 +36,14 @@ exports.addOrderItems = asyncHandler(async (req, res) => {
     res.status(400)
     throw new Error("No order items")
   } else {
+    // const user = {}
+    // user._id = req.user._id || req.body.user._id
+    // user.email = req.user.email || req.body.user.email
+    // user.name = req.user.name || req.body.user.name
     const order = new Order({
       orderItems: outputItems,
-      user: req.user._id,
+      user,
+      userId: user._id,
       shippingAddress,
       paymentMethod,
       itemsPrice,
@@ -57,10 +62,7 @@ exports.addOrderItems = asyncHandler(async (req, res) => {
 // @route: GET /api/orders/:id
 // @access: Private
 exports.getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id).populate(
-    "user",
-    "name email"
-  )
+  const order = await Order.findById(req.params.id)
 
   if (order) {
     res.status(200).json(order)
@@ -118,7 +120,7 @@ exports.updateOrderToSent = asyncHandler(async (req, res) => {
 // @route: GET /api/orders/myorders
 // @access: Private
 exports.getMyOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ user: req.user._id })
+  const orders = await Order.find({ userId: req.user._id })
   res.json(orders)
 })
 
@@ -126,6 +128,6 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
 // @route: GET /api/orders
 // @access: Private/Admin
 exports.getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({}).populate("user", "id name")
+  const orders = await Order.find({})
   res.json(orders)
 })

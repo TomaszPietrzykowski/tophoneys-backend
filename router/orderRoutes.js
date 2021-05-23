@@ -1,22 +1,22 @@
-const express = require("express");
-const router = express.Router();
-const authMiddleware = require("../middleware/authMiddleware");
-const orderController = require("../controller/orderController");
+const express = require("express")
+const router = express.Router()
+const authMiddleware = require("../middleware/authMiddleware")
+const orderController = require("../controller/orderController")
 
 router
   .route("/")
-  .post(authMiddleware.protect, orderController.addOrderItems)
-  .get(authMiddleware.protect, authMiddleware.admin, orderController.getOrders);
+  .post(orderController.addOrderItems)
+  .get(authMiddleware.protect, authMiddleware.admin, orderController.getOrders)
 
 router
   .route("/myorders")
-  .get(authMiddleware.protect, orderController.getMyOrders);
+  .get(authMiddleware.protect, orderController.getMyOrders)
 
-router.route("/:id").get(authMiddleware.protect, orderController.getOrderById);
+router.route("/:id").get(orderController.getOrderById)
 
 router
   .route("/:id/pay")
-  .put(authMiddleware.protect, orderController.updateOrderToPaid);
+  .put(authMiddleware.protect, orderController.updateOrderToPaid)
 
 router
   .route("/:id/deliver")
@@ -24,6 +24,6 @@ router
     authMiddleware.protect,
     authMiddleware.admin,
     orderController.updateOrderToSent
-  );
+  )
 
-module.exports = router;
+module.exports = router
