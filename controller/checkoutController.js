@@ -1,12 +1,10 @@
-// const axios = require("axios")
-// const request = require("request")
 const asyncHandler = require("express-async-handler")
 const checkoutNodeJssdk = require("@paypal/checkout-server-sdk")
 const payPalClient = require("../config/payPalClient")
 const Order = require("../model/orderModel")
 
 // @description: Create payment
-// @route: GET /api/checkout/create
+// @route: POST /api/checkout/create
 // @access: App/Paypal
 exports.createPayment = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.body.customOrderId)
@@ -66,39 +64,31 @@ exports.createPayment = asyncHandler(async (req, res) => {
 })
 
 // @description: Execute payment
-// @route: GET /api/checkout/execute
+// @route: POST /api/checkout/execute
 // @access: App/Paypal
 exports.executePayment = asyncHandler(async (req, res) => {
-  // 2. Get the payment ID and the payer ID from the request body.
-  var orderID = req.body.orderID
-  // var payerID = req.body.payerID
+  // 2. Get the payment ID from the request body.
+  const orderID = req.body.orderID
 
   const request = new checkoutNodeJssdk.orders.OrdersCaptureRequest(orderID)
   request.requestBody({})
-  try {
-    const capture = await payPalClient.client().execute(request)
 
-    // 4. Save the capture to your database. Update order to paid in database
-    const captureID = capture.result.purchase_units[0].payments.captures[0].id
+  const capture = await payPalClient.client().execute(request)
 
-    const order = await Order.findById(
-      capture.result.purchase_units[0].payments.captures[0].custom_id
-    )
+  // 4. Update order to paid in database
+  const order = await Order.findById(
+    capture.result.purchase_units[0].payments.captures[0].custom_id
+  )
 
-    if (order) {
-      order.isPaid = true
-      order.paidAt = Date.now()
-      order.paymentResult = {
-        ...capture.result,
-      }
-
-      await order.save()
+  if (order) {
+    order.isPaid = true
+    order.paidAt = Date.now()
+    order.paymentResult = {
+      ...capture.result,
     }
-    // 5. Return a successful response to the client
-    res.status(200).send(capture)
-  } catch (err) {
-    // 6. Handle any errors from the call
-    console.error(err)
-    return res.sendStatus(500)
+
+    await order.save()
   }
+  // 5. Return a successful response to the client
+  res.status(200).send(capture)
 })

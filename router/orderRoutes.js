@@ -15,10 +15,6 @@ router
 router.route("/:id").get(orderController.getOrderById)
 
 router
-  .route("/:id/pay")
-  .put(authMiddleware.protect, orderController.updateOrderToPaid)
-
-router
   .route("/:id/deliver")
   .put(
     authMiddleware.protect,
