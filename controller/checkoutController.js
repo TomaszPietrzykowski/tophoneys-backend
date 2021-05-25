@@ -8,13 +8,20 @@ const Order = require("../model/orderModel")
 // @access: App/Paypal
 exports.createPayment = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.body.customOrderId)
-
   function buildRequestBody() {
+    const countryCode = order.shippingAddress.country
+      .toLowerCase()
+      .startsWith("be")
+      ? "BE"
+      : order.shippingAddress.country.toLowerCase().startsWith("pol") ||
+        order.shippingAddress.country.toLowerCase() === "pl"
+      ? "PL"
+      : "NL"
     return {
       intent: "CAPTURE",
       application_context: {
-        return_url: "https://www.example.com",
-        cancel_url: "https://www.example.com",
+        return_url: `https://tophoneys.com/order/${req.body.customOrderId}`,
+        cancel_url: `https://tophoneys.com/order/${req.body.customOrderId}`,
         brand_name: "TOP HONEYS",
         locale: "en-US",
         landing_page: "BILLING",
@@ -30,7 +37,7 @@ exports.createPayment = asyncHandler(async (req, res) => {
           description: "Top Honeys Order",
 
           custom_id: order._id,
-          soft_descriptor: "HighFashions",
+          soft_descriptor: "BestHoneysEver",
           amount: {
             currency_code: "EUR",
             value: order.totalPrice,
@@ -46,7 +53,7 @@ exports.createPayment = asyncHandler(async (req, res) => {
               admin_area_2: order.shippingAddress.city,
               admin_area_1: order.shippingAddress.country,
               postal_code: order.shippingAddress.postalCode,
-              country_code: "NL",
+              country_code: countryCode,
             },
           },
         },
@@ -67,7 +74,7 @@ exports.createPayment = asyncHandler(async (req, res) => {
 // @route: POST /api/checkout/execute
 // @access: App/Paypal
 exports.executePayment = asyncHandler(async (req, res) => {
-  // 2. Get the payment ID from the request body.
+  // 1. Get the payment ID from the request body.
   const orderID = req.body.orderID
 
   const request = new checkoutNodeJssdk.orders.OrdersCaptureRequest(orderID)
@@ -75,7 +82,7 @@ exports.executePayment = asyncHandler(async (req, res) => {
 
   const capture = await payPalClient.client().execute(request)
 
-  // 4. Update order to paid in database
+  // 2. Update order to paid in database
   const order = await Order.findById(
     capture.result.purchase_units[0].payments.captures[0].custom_id
   )
@@ -89,6 +96,6 @@ exports.executePayment = asyncHandler(async (req, res) => {
 
     await order.save()
   }
-  // 5. Return a successful response to the client
+  // 3. Return a successful response to the client
   res.status(200).send(capture)
 })
