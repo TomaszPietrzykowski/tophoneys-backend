@@ -1,6 +1,7 @@
 const Order = require("../model/orderModel")
 const asyncHandler = require("express-async-handler")
 const Product = require("../model/productModel")
+const settings = require("../config/settings")
 
 // @description: Create new order
 // @route: POST /api/orders
@@ -103,6 +104,12 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
 // @route: GET /api/orders
 // @access: Private/Admin
 exports.getOrders = asyncHandler(async (req, res) => {
+  const pageSize = settings.productAdminPageSize
+  const page = Number(req.query.pageNumber) || 1
+  const count = await Order.countDocuments({})
   const orders = await Order.find({})
-  res.json(orders)
+    .sort({ createdAt: -1 })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+  res.json({ orders, page, pages: Math.ceil(count / pageSize) })
 })
