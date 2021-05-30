@@ -12,6 +12,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
   const page = Number(req.query.pageNumber) || 1
   const count = await Product.countDocuments({})
   const products = await Product.find({})
+    .sort({ createdAt: -1 })
     .limit(pageSize)
     .skip(pageSize * (page - 1))
   res.json({ products, page, pages: Math.ceil(count / pageSize) })
@@ -136,7 +137,7 @@ exports.updateProduct = asyncHandler(async (req, res) => {
     product.user = req.user._id
     product.image = req.body.image || product.image
     product.description = req.body.description || product.description
-    product.brand = req.body.brand || product.brand
+    product.brand = req.body.brand || ""
     product.category = req.body.category || product.category
     product.capacity = req.body.capacity || product.capacity
     product.capacityDropdown =
@@ -144,8 +145,7 @@ exports.updateProduct = asyncHandler(async (req, res) => {
     product.price = req.body.price || product.price
     product.previousPrice = req.body.previousPrice || product.previousPrice
     product.countInStock = req.body.countInStock || product.countInStock
-    product.countryOfOrigin =
-      req.body.countryOfOrigin || product.countryOfOrigin
+    product.countryOfOrigin = req.body.countryOfOrigin || ""
     product.isPromo = req.body.isPromo
     product.isPublished = req.body.isPublished
 
