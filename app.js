@@ -9,6 +9,7 @@ const userRouter = require("./router/userRoutes")
 const orderRouter = require("./router/orderRoutes")
 const uploadRouter = require("./router/uploadRoutes")
 const checkoutRouter = require("./router/checkoutRoutes")
+// const puf = require("./utils/parseUrlFriendly")
 const errorMiddleware = require("./middleware/errorMiddleware.js")
 
 dotenv.config()
@@ -31,6 +32,10 @@ app.use("/public", express.static(path.join(__dirname, "/public")))
 
 app.use(errorMiddleware.notFound)
 app.use(errorMiddleware.errorHandler)
+
+// sandbox -----------------
+// console.log(puf(" d uuu 8 6 5 4 2 1111 &^% 765 765 44* * & % $       ##"))
+// sandbox -----------------
 
 const PORT = process.env.PORT || 5000
 app.listen(
