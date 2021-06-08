@@ -9,6 +9,7 @@ const userRouter = require("./router/userRoutes")
 const orderRouter = require("./router/orderRoutes")
 const uploadRouter = require("./router/uploadRoutes")
 const checkoutRouter = require("./router/checkoutRoutes")
+const emailRouter = require("./router/emailRoutes")
 // const puf = require("./utils/parseUrlFriendly")
 const errorMiddleware = require("./middleware/errorMiddleware.js")
 
@@ -23,6 +24,7 @@ app.use("/api/users", userRouter)
 app.use("/api/orders", orderRouter)
 app.use("/api/uploads", uploadRouter)
 app.use("/api/checkout", checkoutRouter)
+app.use("/api/email", emailRouter)
 
 app.use("/api/config/paypal", (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
@@ -34,7 +36,7 @@ app.use(errorMiddleware.notFound)
 app.use(errorMiddleware.errorHandler)
 
 // sandbox -----------------
-// console.log(puf(" d uuu 8 6 5 4 2 1111 &^% 765 765 44* * & % $       ##"))
+// console.log(puf("iPhone 8 - 123 (1)"))
 // sandbox -----------------
 
 const PORT = process.env.PORT || 5000

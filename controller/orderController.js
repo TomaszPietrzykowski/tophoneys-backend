@@ -2,6 +2,7 @@ const Order = require("../model/orderModel")
 const asyncHandler = require("express-async-handler")
 const Product = require("../model/productModel")
 const settings = require("../config/settings")
+const { sendConfirmationEmail } = require("./emailController")
 
 // @description: Create new order
 // @route: POST /api/orders
@@ -24,7 +25,7 @@ exports.addOrderItems = asyncHandler(async (req, res) => {
   const itemsPrice = addDecimals(
     outputItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   )
-  const shippingPrice = itemsPrice >= 39 ? 0 : 3.95
+  const shippingPrice = itemsPrice >= 39 ? 0 : 4.95
   // taxPrice = addDecimals(Number((0.1 * cart.itemsPrice).toFixed(2)));
   const taxPrice = 0
   const totalPrice = (
@@ -54,7 +55,12 @@ exports.addOrderItems = asyncHandler(async (req, res) => {
     })
 
     const createdOrder = await order.save()
-
+    sendConfirmationEmail(
+      createdOrder.user.email,
+      createdOrder.user.name,
+      createdOrder._id,
+      "order"
+    )
     res.status(201).json(createdOrder)
   }
 })

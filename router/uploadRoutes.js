@@ -1,6 +1,7 @@
 const express = require("express")
 const multer = require("multer")
 const path = require("path")
+const parseUrlFriendly = require("../utils/parseUrlFriendly")
 
 const router = express.Router()
 
@@ -11,9 +12,9 @@ const storage = multer.diskStorage({
   filename(req, file, cb) {
     cb(
       null,
-      `${file.originalname.split(".")[0]}-${Date.now()}${path.extname(
-        file.originalname
-      )}`
+      `${parseUrlFriendly(
+        file.originalname.split(".")[0]
+      )}-${Date.now()}${path.extname(file.originalname)}`
     )
   },
 })

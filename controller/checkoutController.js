@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler")
 const checkoutNodeJssdk = require("@paypal/checkout-server-sdk")
 const payPalClient = require("../config/payPalClient")
 const Order = require("../model/orderModel")
+const { sendConfirmationEmail } = require("./emailController")
 
 // @description: Create payment
 // @route: POST /api/checkout/create
@@ -95,7 +96,15 @@ exports.executePayment = asyncHandler(async (req, res) => {
     }
 
     await order.save()
+    // 3. Send purchase confirmation email
+    sendConfirmationEmail(
+      order.user.email,
+      order.user.name,
+      order._id,
+      "purchase"
+    )
   }
-  // 3. Return a successful response to the client
+
+  // 4. Return a successful response to the client
   res.status(200).send(capture)
 })
