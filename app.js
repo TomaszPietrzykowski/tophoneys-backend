@@ -11,6 +11,7 @@ const uploadRouter = require("./router/uploadRoutes")
 const checkoutRouter = require("./router/checkoutRoutes")
 const emailRouter = require("./router/emailRoutes")
 // const puf = require("./utils/parseUrlFriendly")
+// const appEmails = require("./utils/appEmails")
 const errorMiddleware = require("./middleware/errorMiddleware.js")
 
 dotenv.config()
@@ -36,6 +37,7 @@ app.use(errorMiddleware.notFound)
 app.use(errorMiddleware.errorHandler)
 
 // sandbox -----------------
+// console.log(appEmails.orderConfirmationHtml("1234567"))
 // console.log(puf("iPhone 8 - 123 (1)"))
 // sandbox -----------------
 
