@@ -10,41 +10,34 @@ const orderRouter = require("./router/orderRoutes")
 const uploadRouter = require("./router/uploadRoutes")
 const checkoutRouter = require("./router/checkoutRoutes")
 const emailRouter = require("./router/emailRoutes")
-// const puf = require("./utils/parseUrlFriendly")
-// const appEmails = require("./utils/appEmails")
 const errorMiddleware = require("./middleware/errorMiddleware.js")
-
+// initiate
 dotenv.config()
 connectDB()
 const app = express()
+// middleware
 app.use(cors())
 app.use(express.json())
-
 app.use("/api/products", productRouter)
 app.use("/api/users", userRouter)
 app.use("/api/orders", orderRouter)
 app.use("/api/uploads", uploadRouter)
 app.use("/api/checkout", checkoutRouter)
 app.use("/api/email", emailRouter)
-
-app.use("/api/config/paypal", (req, res) =>
-  res.send(process.env.PAYPAL_CLIENT_ID)
-)
-
+// static
 app.use("/public", express.static(path.join(__dirname, "/public")))
-
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/dist")))
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "dist", "index.html"))
+  )
+} else {
+  app.get("*", (req, res) => {
+    res.send("API is running in development mode")
+  })
+}
+// custom error handlers
 app.use(errorMiddleware.notFound)
 app.use(errorMiddleware.errorHandler)
-
-// sandbox -----------------
-// console.log(appEmails.orderConfirmationHtml("1234567"))
-// console.log(puf("iPhone 8 - 123 (1)"))
-// sandbox -----------------
-
-const PORT = process.env.PORT || 5000
-app.listen(
-  PORT,
-  console.log(
-    `Server running in ${process.env.NODE_ENV} on port: ${PORT}`.yellow.bold
-  )
-)
+// let's rock
+app.listen()

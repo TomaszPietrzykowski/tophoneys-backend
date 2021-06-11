@@ -13,9 +13,9 @@ const template = require("./emailTemplate")
 exports.registerConfirmationHtml = (userName) => {
   return template(`<h1>Sweet to meet you ${userName} :)</h1>
         <p>Thank you for creating user account.</p>
-        <p>Your user profile is accessible after logging in at tophoneys.com or via below link:</p>
+        <p>Your user profile is accessible after logging in at our website or via below link:</p>
         <p><a href="${process.env.HOME_DOMAIN}/profile">My Profile</a></p>
-        <p>In your profile you may edit your user data as well as find your order number and check shipping status.</p>
+        <p>In your profile you may edit your user data as well as find your order number and check shipping status after purchase.</p>
         <p>Your account is 100% free and voluntary.</p>
         <p>You may contact us at <a href="mailto:info@tophoneys.com">info@tophoneys.com</a></p>
         <p>Happy shopping!</p>
@@ -109,5 +109,5 @@ exports.sendEmailConfirmationHtml = (senderName) => {
   `)
 }
 exports.sendEmailConfirmationTxt = (senderName) => {
-  return `Hi, ${senderName}\n Thank you for sending us a message. We will answer as soon as possible.`
+  return `${senderName}\n, thank you for sending us a message. \nWe will answer as soon as possible.`
 }

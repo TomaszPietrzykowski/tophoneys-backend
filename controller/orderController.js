@@ -26,7 +26,6 @@ exports.addOrderItems = asyncHandler(async (req, res) => {
     outputItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   )
   const shippingPrice = itemsPrice >= 39 ? 0 : 4.95
-  // taxPrice = addDecimals(Number((0.1 * cart.itemsPrice).toFixed(2)));
   const taxPrice = 0
   const totalPrice = (
     Number(itemsPrice) +
@@ -38,10 +37,6 @@ exports.addOrderItems = asyncHandler(async (req, res) => {
     res.status(400)
     throw new Error("No order items")
   } else {
-    // const user = {}
-    // user._id = req.user._id || req.body.user._id
-    // user.email = req.user.email || req.body.user.email
-    // user.name = req.user.name || req.body.user.name
     const order = new Order({
       orderItems: outputItems,
       user,

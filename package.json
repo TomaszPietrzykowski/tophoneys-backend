@@ -6,9 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "test",
-    "data:import": "node data/seeder",
-    "data:destroy": "node data/seeder -d"
+    "test": "test"
   },
   "repository": {
     "type": "git",
