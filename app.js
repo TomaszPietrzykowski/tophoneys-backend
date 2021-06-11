@@ -26,16 +26,10 @@ app.use("/api/checkout", checkoutRouter)
 app.use("/api/email", emailRouter)
 // static
 app.use("/public", express.static(path.join(__dirname, "/public")))
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/dist")))
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname, "dist", "index.html"))
-  )
-} else {
-  app.get("*", (req, res) => {
-    res.send("API is running in development mode")
-  })
-}
+app.use(express.static(path.join(__dirname, "/dist")))
+app.get("*", (req, res) =>
+  res.sendFile(path.resolve(__dirname, "dist", "index.html"))
+)
 // custom error handlers
 app.use(errorMiddleware.notFound)
 app.use(errorMiddleware.errorHandler)

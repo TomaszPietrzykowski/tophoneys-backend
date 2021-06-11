@@ -21,8 +21,8 @@ exports.createPayment = asyncHandler(async (req, res) => {
     return {
       intent: "CAPTURE",
       application_context: {
-        return_url: `https://tophoneys.com/order/${req.body.customOrderId}`,
-        cancel_url: `https://tophoneys.com/order/${req.body.customOrderId}`,
+        return_url: `${process.env.HOME_DOMAIN}/order/${req.body.customOrderId}`,
+        cancel_url: `${process.env.HOME_DOMAIN}/order/${req.body.customOrderId}`,
         brand_name: "TOP HONEYS",
         locale: "en-US",
         landing_page: "BILLING",
