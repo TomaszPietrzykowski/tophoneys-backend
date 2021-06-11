@@ -24,6 +24,9 @@ app.use("/api/orders", orderRouter)
 app.use("/api/uploads", uploadRouter)
 app.use("/api/checkout", checkoutRouter)
 app.use("/api/email", emailRouter)
+app.use("/api/config/paypal", (req, res) =>
+  res.send(process.env.PAYPAL_CLIENT_ID)
+)
 // static
 app.use("/public", express.static(path.join(__dirname, "/public")))
 app.use(express.static(path.join(__dirname, "/dist")))
