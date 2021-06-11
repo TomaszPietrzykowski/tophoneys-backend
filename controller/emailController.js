@@ -149,7 +149,7 @@ exports.sendConfirmationEmail = async (
     })
 
     // 4. Send actual confirmation email
-    let info = await transporter.sendMail({
+    await transporter.sendMail({
       from: process.env.VENDOR_OFFICIAL_EMAIL,
       to: `${clientName}<${clientEmail}>`,
       subject: title,
