@@ -1,7 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const authMiddleware = require("../middleware/authMiddleware");
-const productController = require("../controller/productController");
+const express = require("express")
+const router = express.Router()
+const authMiddleware = require("../middleware/authMiddleware")
+const productController = require("../controller/productController")
 
 router
   .route("/")
@@ -10,8 +10,9 @@ router
     authMiddleware.protect,
     authMiddleware.admin,
     productController.createProduct
-  );
+  )
 
+router.get("/featured", productController.getRandomProducts)
 router
   .route("/:id")
   .get(productController.getProductById)
@@ -24,10 +25,10 @@ router
     authMiddleware.protect,
     authMiddleware.admin,
     productController.updateProduct
-  );
+  )
 
-router.get("/category/:id", productController.getCategory);
+router.get("/category/:id", productController.getCategory)
 
-router.get("/search/:keyword", productController.searchProducts);
+router.get("/search/:keyword", productController.searchProducts)
 
-module.exports = router;
+module.exports = router
