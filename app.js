@@ -11,7 +11,6 @@ const uploadRouter = require("./router/uploadRoutes")
 const checkoutRouter = require("./router/checkoutRoutes")
 const emailRouter = require("./router/emailRoutes")
 const errorMiddleware = require("./middleware/errorMiddleware.js")
-const randomizeResponse = require("./utils/randomizeResponse.js")
 // initiate
 dotenv.config()
 connectDB()
@@ -37,8 +36,5 @@ app.get("*", (req, res) =>
 // custom error handlers
 app.use(errorMiddleware.notFound)
 app.use(errorMiddleware.errorHandler)
-
-// sandbox
-// console.log(randomizeResponse([1, 2, 3, 4, 5, 6, 7, 8, 9], 5))
 // let's rock
-app.listen(5000)
+app.listen()
