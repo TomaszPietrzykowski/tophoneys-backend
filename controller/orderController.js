@@ -25,7 +25,10 @@ exports.addOrderItems = asyncHandler(async (req, res) => {
   const itemsPrice = addDecimals(
     outputItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   )
-  const shippingPrice = itemsPrice >= 39 ? 0 : 4.95
+  const shippingPrice =
+    itemsPrice >= 39 || shippingAddress.city.toLowerCase() === "purmerend"
+      ? 0
+      : 4.95
   const taxPrice = 0
   const totalPrice = (
     Number(itemsPrice) +
