@@ -95,6 +95,7 @@ exports.updateUserProfile = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
+      isSuperAdmin: updatedUser.isSuperAdmin || false,
       token: generateToken(updatedUser._id),
     })
   } else {
@@ -117,8 +118,15 @@ exports.getUsers = asyncHandler(async (req, res) => {
 exports.deleteUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id)
   if (user) {
-    await user.remove()
-    res.json({ message: "User deleted" })
+    if (!user.isSuperAdmin) {
+      await user.remove()
+      res.json({ message: "User deleted" })
+    } else {
+      res.status(401).json({
+        message:
+          "Superadmin settings cannot be changed from this permission tier.",
+      })
+    }
   } else {
     res.status(404)
     throw new Error("User not found")

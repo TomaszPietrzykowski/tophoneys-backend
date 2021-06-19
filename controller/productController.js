@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler")
 const fs = require("fs")
 const path = require("path")
 const settings = require("../config/settings")
+const randomizeResponse = require("../utils/randomizeResponse")
 
 // @description: Fetch all products
 // @route: GET /api/products
@@ -16,6 +17,16 @@ exports.getProducts = asyncHandler(async (req, res) => {
     .limit(pageSize)
     .skip(pageSize * (page - 1))
   res.json({ products, page, pages: Math.ceil(count / pageSize) })
+})
+
+// @description: Fetch random products
+// @route: GET /api/products/featured
+// @access: Public/App
+exports.getRandomProducts = asyncHandler(async (req, res) => {
+  const amount = Number(req.query.number) || 5
+  const products = await Product.find({})
+  const response = randomizeResponse(products, amount)
+  res.json(response)
 })
 
 // @description: Fetch single product
