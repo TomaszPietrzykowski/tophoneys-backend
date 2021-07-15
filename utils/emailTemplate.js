@@ -69,7 +69,7 @@ const emailTemplate = (markup) => {
     </style>
     </head>
     <body>
-    <header><a href="https://staging.tophoneys.com"><img src="https://staging.tophoneys.com/logotranspbg.png" alt="logo" height="50px"></a></header>
+    <header><a href="https://tophoneys.com"><img src="https://tophoneys.com/logotranspbg.png" alt="logo" height="50px"></a></header>
     <main>
       ${markup}
     </main>

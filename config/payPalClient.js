@@ -26,7 +26,7 @@ function environment() {
   let clientId = process.env.PAYPAL_CLIENT_ID
   let clientSecret = process.env.PAYPAL_SECRET
 
-  return new checkoutNodeJssdk.core.SandboxEnvironment(clientId, clientSecret)
+  return new checkoutNodeJssdk.core.LiveEnvironment(clientId, clientSecret)
 }
 
 async function prettyPrint(jsonData, pre = "") {
