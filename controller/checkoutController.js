@@ -14,9 +14,6 @@ exports.createPayment = asyncHandler(async (req, res) => {
       .toLowerCase()
       .startsWith("be")
       ? "BE"
-      : order.shippingAddress.country.toLowerCase().startsWith("pol") ||
-        order.shippingAddress.country.toLowerCase() === "pl"
-      ? "PL"
       : "NL"
     return {
       intent: "CAPTURE",
