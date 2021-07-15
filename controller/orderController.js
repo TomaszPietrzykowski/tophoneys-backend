@@ -26,7 +26,7 @@ exports.addOrderItems = asyncHandler(async (req, res) => {
     outputItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   )
   const shippingPrice =
-    itemsPrice >= 39 || shippingAddress.city.toLowerCase() === "purmerend"
+    itemsPrice >= 49.9 || shippingAddress.city.toLowerCase() === "purmerend"
       ? 0
       : 4.95
   const taxPrice = 0

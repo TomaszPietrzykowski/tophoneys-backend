@@ -1,6 +1,5 @@
 const express = require("express")
 const colors = require("colors")
-const cors = require("cors")
 const dotenv = require("dotenv")
 const path = require("path")
 const connectDB = require("./config/db")
@@ -16,8 +15,8 @@ dotenv.config()
 connectDB()
 const app = express()
 // middleware
-app.use(cors())
 app.use(express.json())
+// routes
 app.use("/api/products", productRouter)
 app.use("/api/users", userRouter)
 app.use("/api/orders", orderRouter)
