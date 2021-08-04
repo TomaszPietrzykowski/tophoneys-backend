@@ -4,18 +4,20 @@ const router = express.Router()
 // Initialize the Braintree SDK:
 // 1. Import the Braintree SDK module
 const braintree = require("braintree")
+// 2. Set up a gateway using your Braintree access token
+const gateway = braintree.connect({
+  accessToken: process.env.BRAINTREE_SANDBOX_ACCESS_TOKEN,
+})
 
+//
 // 3. Set up a URL to return a client token to the browser
 router.route("/token").get(function (req, res) {
-  // 2. Set up a gateway using your Braintree access token
-  const gateway = braintree.connect({
-    accessToken: process.env.BRAINTREE_SANDBOX_ACCESS_TOKEN,
-  })
-
   gateway.clientToken.generate({}, function (err, response) {
     res.json(response.clientToken)
   })
 })
+
+//
 // Execute the payment:
 // 1. Set up a URL to handle requests from the PayPal button
 router.route("/execute").post(function (req, res) {
