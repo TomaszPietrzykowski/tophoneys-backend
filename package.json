@@ -15,6 +15,7 @@
   "author": "Tomasz Pietrzykowski",
   "license": "ISC",
   "dependencies": {
+    "@mollie/api-client": "^3.5.1",
     "@paypal/checkout-server-sdk": "^1.0.2",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",

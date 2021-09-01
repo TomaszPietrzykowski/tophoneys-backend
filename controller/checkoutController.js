@@ -105,3 +105,70 @@ exports.executePayment = asyncHandler(async (req, res) => {
   // 4. Return a successful response to the client
   res.status(200).send(capture)
 })
+
+//
+//
+//         MOLLIE --------------------------------------------------
+//
+//
+
+const { createMollieClient } = require("@mollie/api-client")
+
+// create client
+const mollieClient = createMollieClient({
+  apiKey: "test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM",
+})
+
+// @description: Create mollie payment
+// @route: POST /api/checkout/proceed
+// @payload: orderID
+// @access: App/Mollie
+exports.createMolliePayment = asyncHandler(async (req, res) => {
+  // 1. Get the payment ID from the request body.
+  const orderID = req.body.orderID
+  const order = await Order.findById(orderID)
+  const total = order.totalPrice
+
+  mollieClient.payments
+    .create({
+      amount: {
+        value: total,
+        currency: "EUR",
+      },
+      description: `Order: ${orderID}`,
+      redirectUrl: `${process.env.HOME_DOMAIN}/order/${orderID}`,
+      webhookUrl: `${process.env.HOME_DOMAIN}/api/checkout/webhook/${orderID}`,
+    })
+    .then((payment) => {
+      // Forward the customer to the payment.getCheckoutUrl()
+      let checkoutUrl = payment.getCheckoutUrl()
+      console.log(checkoutUrl)
+      res.redirect(checkoutUrl)
+    })
+    .catch((error) => {
+      // Handle the error
+      console.log(error)
+    })
+  // NEAT UP ERROR HANDLING HERE................, send res
+})
+
+// @description: Webhook triggered by Mollie on status change
+// @route: POST /api/checkout/webhook/:id
+// @access: App/Mollie
+exports.paymentWebhook = asyncHandler(async (req, res) => {
+  // 1. Get the order ID from url.
+  const orderID = req.params.id
+  // 1. Get the payment ID from req body.
+  const paymentID = req.body.id
+
+  // 3. Get updated order state
+  const paymentData = await axios.get(
+    `https://api.mollie.com/v2/payments/${paymentID}`
+  )
+  console.log(paymentData)
+  //
+  //
+  // update order to paid if success
+
+  res.send(200)
+})
