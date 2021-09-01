@@ -116,7 +116,7 @@ const { createMollieClient } = require("@mollie/api-client")
 
 // create client
 const mollieClient = createMollieClient({
-  apiKey: "test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM",
+  apiKey: "test_Q4xwfT9Nzze82F45JPMc75RCqEKntD",
 })
 
 // @description: Create mollie payment
@@ -128,26 +128,32 @@ exports.createMolliePayment = asyncHandler(async (req, res) => {
   const orderID = req.body.orderID
   const order = await Order.findById(orderID)
   const total = order.totalPrice
-
   mollieClient.payments
     .create({
       amount: {
-        value: total,
+        value: total.toFixed(2),
         currency: "EUR",
       },
-      description: `Order: ${orderID}`,
+      // method: ["ideal", "creditcard", "bancontact"],
+      locale: "nl-NL",
+      description: `TOP HONEYS \nOrder: ${orderID}`,
       redirectUrl: `${process.env.HOME_DOMAIN}/order/${orderID}`,
       webhookUrl: `${process.env.HOME_DOMAIN}/api/checkout/webhook/${orderID}`,
     })
     .then((payment) => {
+      //
+      // SAVE PAYMENT DATA IN DB !!!
+      // as Order.paymentResult
+      //
       // Forward the customer to the payment.getCheckoutUrl()
       let checkoutUrl = payment.getCheckoutUrl()
       console.log(checkoutUrl)
-      res.redirect(checkoutUrl)
+      res.json({ checkoutUrl })
     })
     .catch((error) => {
       // Handle the error
       console.log(error)
+      res.status(500).json({ message: "Error creating payment" })
     })
   // NEAT UP ERROR HANDLING HERE................, send res
 })
@@ -160,15 +166,26 @@ exports.paymentWebhook = asyncHandler(async (req, res) => {
   const orderID = req.params.id
   // 1. Get the payment ID from req body.
   const paymentID = req.body.id
-
   // 3. Get updated order state
-  const paymentData = await axios.get(
-    `https://api.mollie.com/v2/payments/${paymentID}`
-  )
-  console.log(paymentData)
-  //
-  //
-  // update order to paid if success
-
-  res.send(200)
+  mollieClient.payments
+    .get(paymentID)
+    .then((payment) => {
+      console.log(payment)
+      // Check if the payment.isPaid()
+      if (payment.isPaid()) {
+        //
+        // update order to paid
+        //
+        // send confirmation emails
+        //
+        // send 200 to mollie to trigger user redirect
+        //
+        res.send(200)
+      }
+    })
+    .catch((error) => {
+      // Handle the error
+      // Log error
+      // Ignore mollie? Wait for retry?
+    })
 })
