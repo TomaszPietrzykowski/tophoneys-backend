@@ -5,13 +5,13 @@ const router = express.Router()
 // 1. Import the Braintree SDK module
 const braintree = require("braintree")
 // 2. Set up a gateway using your Braintree access token
-const gateway = braintree.connect({
-  accessToken: process.env.BRAINTREE_SANDBOX_ACCESS_TOKEN,
-})
 
 //
 // 3. Set up a URL to return a client token to the browser
 router.route("/token").get(function (req, res) {
+  const gateway = braintree.connect({
+    accessToken: process.env.BRAINTREE_SANDBOX_ACCESS_TOKEN,
+  })
   gateway.clientToken.generate({}, function (err, response) {
     res.json(response.clientToken)
   })
