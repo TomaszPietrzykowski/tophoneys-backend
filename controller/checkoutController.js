@@ -113,6 +113,7 @@ exports.executePayment = asyncHandler(async (req, res) => {
 //
 
 const { createMollieClient } = require("@mollie/api-client")
+const logger = require("../Logger")
 
 // create client
 const mollieClient = createMollieClient({
@@ -141,51 +142,60 @@ exports.createMolliePayment = asyncHandler(async (req, res) => {
       webhookUrl: `${process.env.HOME_DOMAIN}/api/checkout/webhook/${orderID}`,
     })
     .then((payment) => {
-      //
-      // SAVE PAYMENT DATA IN DB !!!
-      // as Order.paymentResult
-      //
+      console.log(payment)
       // Forward the customer to the payment.getCheckoutUrl()
+      order.paymentId = payment.id
       let checkoutUrl = payment.getCheckoutUrl()
-      console.log(checkoutUrl)
       res.json({ checkoutUrl })
     })
     .catch((error) => {
-      // Handle the error
       console.log(error)
+      logger.log(`Create mollie payment error:\n${error}`)
       res.status(500).json({ message: "Error creating payment" })
     })
-  // NEAT UP ERROR HANDLING HERE................, send res
 })
 
 // @description: Webhook triggered by Mollie on status change
 // @route: POST /api/checkout/webhook/:id
 // @access: App/Mollie
 exports.paymentWebhook = asyncHandler(async (req, res) => {
+  console.log("1. webhook called")
   // 1. Get the order ID from url.
   const orderID = req.params.id
+  console.log("2. order id:", orderID)
   // 1. Get the payment ID from req body.
   const paymentID = req.body.id
   // 3. Get updated order state
+  console.log("3. payment id:", paymentID)
   mollieClient.payments
     .get(paymentID)
-    .then((payment) => {
+    .then(async (payment) => {
       console.log(payment)
       // Check if the payment.isPaid()
       if (payment.isPaid()) {
-        //
-        // update order to paid
-        //
-        // send confirmation emails
-        //
+        // 2. Update order to paid in database
+        const order = await Order.findById(orderID)
+        if (order) {
+          order.isPaid = true
+          order.paidAt = Date.now()
+          order.paymentId = `${paymentID}`
+          order.paymentResult = { ...payment }
+
+          await order.save()
+
+          // 3. Send purchase confirmation email
+          sendConfirmationEmail(
+            order.user.email,
+            order.user.name,
+            order._id,
+            "purchase"
+          )
+        }
         // send 200 to mollie to trigger user redirect
-        //
         res.send(200)
       }
     })
     .catch((error) => {
-      // Handle the error
-      // Log error
-      // Ignore mollie? Wait for retry?
+      logger.log(`mollie webhook error:\n${error}`)
     })
 })
