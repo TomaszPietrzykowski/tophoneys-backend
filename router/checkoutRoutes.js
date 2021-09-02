@@ -7,6 +7,6 @@ router.route("/execute").post(checkoutController.executePayment)
 
 // Mollie endpoints, refactor later
 router.route("/proceed").post(checkoutController.createMolliePayment)
-router.route("/webhook/:id").post(checkoutController.paymentWebhook)
+router.route("/webhook/:orderId").post(checkoutController.paymentWebhook)
 
 module.exports = router

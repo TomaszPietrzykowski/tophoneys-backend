@@ -161,8 +161,9 @@ exports.createMolliePayment = asyncHandler(async (req, res) => {
 exports.paymentWebhook = asyncHandler(async (req, res) => {
   console.log("1. webhook called")
   // 1. Get the order ID from url.
-  const orderID = req.params.id
+  const orderID = req.params.orderId
   console.log("2. order id:", orderID)
+  console.log(req)
   // 1. Get the payment ID from req body.
   const paymentID = req.body.id
   // 3. Get updated order state

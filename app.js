@@ -16,6 +16,7 @@ connectDB()
 const app = express()
 // middleware
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 // routes
 app.use("/api/products", productRouter)
 app.use("/api/users", userRouter)
