@@ -7,7 +7,7 @@ const dotenv = require("dotenv")
 dotenv.config()
 // Create mollie client
 const mollieClient = createMollieClient({
-  apiKey: process.env.MOLLIE_API_KEY,
+  apiKey: process.env.MOLLIE_LIVE_API_KEY,
 })
 
 // @description: Create mollie payment
@@ -56,17 +56,15 @@ exports.paymentWebhook = asyncHandler(async (req, res) => {
   mollieClient.payments
     .get(paymentID)
     .then(async (payment) => {
-      console.log(payment)
       // Check if the payment.isPaid()
       if (payment.isPaid()) {
         // 2. Update order to paid in database
         const order = await Order.findById(orderID)
-        if (order) {
+        if (order && !order.isPaid) {
           order.isPaid = true
           order.paidAt = Date.now()
           order.paymentId = `${paymentID}`
           order.paymentResult = { ...payment }
-
           await order.save()
 
           // 3. Send purchase confirmation email
