@@ -5,6 +5,7 @@ const { createMollieClient } = require("@mollie/api-client")
 const logger = require("../Logger")
 const dotenv = require("dotenv")
 dotenv.config()
+
 // Create mollie client
 const mollieClient = createMollieClient({
   apiKey: process.env.MOLLIE_LIVE_API_KEY,
